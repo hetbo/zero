@@ -1,0 +1,19 @@
+{
+    "name": "hetbo/zero",
+    "description": "done beats perfect and real beats safe",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hetbo\\Zero\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hosein Safdel",
+            "email": "hetbo98@yahoo.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
