@@ -3,6 +3,8 @@
 namespace Hetbo\Zero\Tests;
 
 use Hetbo\Zero\ZeroServiceProvider;
+use Illuminate\Http\Testing\File;
+use Illuminate\Http\UploadedFile;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -35,5 +37,21 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+
+        // Set up file storage for testing
+        config()->set('filesystems.disks.public.driver', 'local');
+        config()->set('filesystems.disks.public.root', storage_path('framework/testing/disks/public'));
+
     }
+
+/*    function createTestFile($name = 'test.txt', $content = 'test content'): File
+    {
+        return UploadedFile::fake()->createWithContent($name, $content);
+    }
+
+    function createTestImage($name = 'test.jpg'): File
+    {
+        return UploadedFile::fake()->image($name);
+    }*/
+
 }

@@ -1,6 +1,9 @@
 <?php
 
 use Hetbo\Zero\Tests\TestCase;
+use Illuminate\Http\Testing\File;
+use Illuminate\Http\UploadedFile;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -44,3 +47,15 @@ function something()
 {
     // ..
 }
+
+// Global test helpers
+function createTestFile($name = 'test.txt', $content = 'test content'): File
+{
+    return UploadedFile::fake()->createWithContent($name, $content);
+}
+
+function createTestImage($name = 'test.jpg'): File
+{
+    return UploadedFile::fake()->image($name);
+}
+
