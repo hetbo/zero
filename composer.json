@@ -37,11 +37,11 @@
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require-dev": {
-        "orchestra/testbench": "10.x-dev",
-        "pestphp/pest": "4.x-dev",
-        "phpunit/phpunit": "^12.3"
+        "orchestra/testbench": "*",
+        "pestphp/pest": "*",
+        "phpunit/phpunit": "*"
     },
     "config": {
         "allow-plugins": {
