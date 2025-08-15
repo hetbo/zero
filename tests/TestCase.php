@@ -7,7 +7,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         // additional setup
@@ -23,4 +23,5 @@ class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app)
     {
         // perform environment setup
-    }}
+    }
+}
