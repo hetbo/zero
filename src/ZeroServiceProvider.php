@@ -29,6 +29,9 @@ class ZeroServiceProvider extends ServiceProvider {
                 __DIR__.'/../config/zero.php' => config_path('zero.php'),
             ], 'config'); // The tag here must match the tag in your command
 
+            $this->publishes([
+                __DIR__.'/../database/migrations/' => database_path('migrations')
+            ], 'migrations');
 
         }
     }
