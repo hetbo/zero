@@ -2,7 +2,8 @@
 
 namespace Hetbo\Zero;
 
-use Hetbo\Zero\Console\InstallZero;
+use Hetbo\Zero\Repositories\CarrotRepository;
+use Hetbo\Zero\Repositories\Contracts\CarrotRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class ZeroServiceProvider extends ServiceProvider {
@@ -47,5 +48,10 @@ class ZeroServiceProvider extends ServiceProvider {
             ], 'migrations');*/
 
         }
+
+        $this->app->bind(
+            CarrotRepositoryInterface::class,
+            CarrotRepository::class
+        );
     }
 }
