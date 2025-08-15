@@ -8,12 +8,41 @@
             "Hetbo\\Zero\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Hetbo\\Zero\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Hosein Safdel",
             "email": "hetbo98@yahoo.com"
         }
     ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hetbo\\Zero\\ZeroServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
     "minimum-stability": "dev",
-    "require": {}
+    "require-dev": {
+        "orchestra/testbench": "10.x-dev",
+        "pestphp/pest": "4.x-dev",
+        "phpunit/phpunit": "^12.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }
