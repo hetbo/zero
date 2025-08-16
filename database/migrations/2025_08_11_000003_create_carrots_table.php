@@ -8,13 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        $userTable = $this->getUserTableName();
-
-        Schema::create('carrots', function (Blueprint $table) use ($userTable) {
+        Schema::create('carrots', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('length');
-            $table->foreignId('user_id')->references('id')->on($userTable);
             $table->timestamps();
         });
     }
@@ -24,7 +21,7 @@ return new class extends Migration
         Schema::dropIfExists('carrots');
     }
 
-    private function getUserTableName(): string
+/*    private function getUserTableName(): string
     {
         // Option 1: Use configured table name
         $configuredTable = config('zero.user_table');
@@ -43,5 +40,5 @@ return new class extends Migration
 
         // Fallback
         return 'users';
-    }
+    }*/
 };

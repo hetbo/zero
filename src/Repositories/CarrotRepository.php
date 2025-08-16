@@ -3,26 +3,22 @@
 namespace Hetbo\Zero\Repositories;
 
 use Hetbo\Zero\Contracts\CarrotRepositoryInterface;
-use Hetbo\Zero\Contracts\UserContract;
 use Hetbo\Zero\Models\Carrot;
-use Illuminate\Database\Eloquent\Collection;
 
-class CarrotRepository implements CarrotRepositoryInterface {
-
-    public function getForUser(UserContract $user): Collection
+class CarrotRepository implements CarrotRepositoryInterface
+{
+    public function create(array $data): Carrot
     {
-        return $user->carrots()->orderBy('created_at', 'desc')->get();
+        return Carrot::create($data);
     }
 
-    public function createForUser(UserContract $user, array $data): bool
+    public function find(int $id): ?Carrot
     {
-        $user->carrots()->create($data);
-        return true;
+        return Carrot::find($id);
     }
 
-    public function delete(int $carrotId): bool
+    public function findByName(string $name): ?Carrot
     {
-        return Carrot::destroy($carrotId);
+        return Carrot::where('name', $name)->first();
     }
-
 }

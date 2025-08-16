@@ -2,12 +2,11 @@
 
 namespace Hetbo\Zero\Contracts;
 
-use Illuminate\Database\Eloquent\Collection;
+use Hetbo\Zero\Models\Carrot;
 
-interface CarrotRepositoryInterface {
-
-    public function getForUser(UserContract $user): Collection;
-    public function createForUser(UserContract $user, array $data): bool;
-    public function delete(int $carrotId): bool;
-
+interface CarrotRepositoryInterface
+{
+    public function create(array $data): Carrot;
+    public function find(int $id): ?Carrot;
+    public function findByName(string $name): ?Carrot;
 }

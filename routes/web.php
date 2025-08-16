@@ -1,5 +1,6 @@
 <?php
 
+use Hetbo\Zero\Http\Controllers\CarrotComponentController;
 use Hetbo\Zero\Http\Controllers\CarrotController;
 use Hetbo\Zero\Http\Controllers\MediaController;
 use Hetbo\Zero\Http\Controllers\ZeroController;
@@ -26,3 +27,15 @@ Route::middleware(['web', 'auth'])
         Route::post('/', [CarrotController::class, 'store'])->name('store');
         Route::delete('/{carrot}', [CarrotController::class, 'destroy'])->name('destroy');
     });
+
+
+Route::prefix('carrots-package')->as('carrots-package.')->middleware('web')->group(function () {
+    // Attaches an existing carrot to any model
+    Route::post('/attach', [CarrotComponentController::class, 'attach'])->name('attach');
+
+    // Detaches a carrot from any model
+    Route::post('/detach', [CarrotComponentController::class, 'detach'])->name('detach');
+
+    // Creates a new carrot AND attaches it
+    Route::post('/create-and-attach', [CarrotComponentController::class, 'createAndAttach'])->name('create-and-attach');
+});

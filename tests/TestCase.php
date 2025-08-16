@@ -42,6 +42,13 @@ class TestCase extends Orchestra
         // Set the user_model config to our test User model
         $app['config']->set('zero.user_model', TestUser::class);
 
+        $schema = $app['db']->connection()->getSchemaBuilder();
+        $schema->create('foods', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         Route::get('/login', fn() => 'This is a dummy login page')->name('login');
 

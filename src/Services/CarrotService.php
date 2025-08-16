@@ -3,25 +3,23 @@
 namespace Hetbo\Zero\Services;
 
 use Hetbo\Zero\Contracts\CarrotRepositoryInterface;
-use Hetbo\Zero\Contracts\UserContract;
-use Illuminate\Database\Eloquent\Collection;
+use Hetbo\Zero\Models\Carrot;
 
 class CarrotService
 {
     public function __construct(protected CarrotRepositoryInterface $carrotRepository) {}
 
-    public function getUserCarrots(UserContract $user): Collection
+    /**
+     * Find a carrot by its name, or create it if it doesn't exist.
+     */
+    public function findOrCreate(string $name, int $length): Carrot
     {
-        return $this->carrotRepository->getForUser($user);
-    }
+        $carrot = $this->carrotRepository->findByName($name);
 
-    public function addCarrotForUser(UserContract $user, array $data): bool
-    {
-        return $this->carrotRepository->createForUser($user, $data);
-    }
+        if ($carrot) {
+            return $carrot;
+        }
 
-    public function removeCarrot(int $carrotId): bool
-    {
-        return $this->carrotRepository->delete($carrotId);
+        return $this->carrotRepository->create(['name' => $name, 'length' => $length]);
     }
 }
