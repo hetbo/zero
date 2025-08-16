@@ -1,5 +1,6 @@
 <?php
 
+use Hetbo\Zero\Http\Controllers\AssetController;
 use Hetbo\Zero\Http\Controllers\CarrotComponentController;
 use Hetbo\Zero\Http\Controllers\CarrotController;
 use Hetbo\Zero\Http\Controllers\MediaController;
@@ -29,7 +30,7 @@ Route::middleware(['web', 'auth'])
     });
 
 
-Route::prefix('carrots-package')->as('carrots-package.')->middleware('web')->group(function () {
+Route::prefix('carrot-package')->as('carrot-package.')->middleware('web')->group(function () {
     // Attaches an existing carrot to any model
     Route::post('/attach', [CarrotComponentController::class, 'attach'])->name('attach');
 
@@ -39,3 +40,6 @@ Route::prefix('carrots-package')->as('carrots-package.')->middleware('web')->gro
     // Creates a new carrot AND attaches it
     Route::post('/create-and-attach', [CarrotComponentController::class, 'createAndAttach'])->name('create-and-attach');
 });
+
+// Asset Serving Route
+Route::get('/carrot-package/carrots.js', [AssetController::class, 'source'])->name('carrot-package.assets.js');

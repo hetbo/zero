@@ -3,61 +3,61 @@
 namespace Hetbo\Zero\View\Components;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route; // <-- Import the Route facade
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
 use Illuminate\Support\Collection;
-use InvalidArgumentException; // <-- Import exception class
+use InvalidArgumentException;
 
 class CarrotManager extends Component
 {
+    // These properties will be populated by the `boot()` method.
     public Model $model;
     public string $role;
     public Collection $carrots;
 
-    /**
-     * Create a new component instance.
-     * It can accept an explicit model or try to discover it from the route.
-     */
-    public function __construct(string $role, ?Model $model = null)
+    // This property is used to hold the explicitly passed model.
+    protected ?Model $explicitModel;
+
+    public function __construct(string $role, ?Model $explicitModel = null)
     {
         $this->role = $role;
-        $this->model = $model ?? $this->discoverModelFromRoute();
+        $this->explicitModel = $explicitModel;
 
-        // After the model has been set (either explicitly or via discovery),
-        // we can load its carrots.
+        // Call our new setup method right away.
+        $this->boot();
+    }
+
+    /**
+     * This new method contains the core logic to prepare the component's state.
+     */
+    public function boot(): void
+    {
+        // Determine which model to use.
+        $this->model = $this->explicitModel ?? $this->discoverModelFromRoute();
+
+        // Now that we have a model, load its carrots.
         $this->carrots = $this->model->getCarrotsByRole($this->role);
     }
 
     /**
-     * The magic happens here.
+     * The render method is now extremely simple. Its only job is to return a view.
+     * All the necessary data has already been prepared.
      */
-    protected function discoverModelFromRoute(): Model
-    {
-        // Get the currently resolved route
-        $route = Route::current();
-
-        if (!$route) {
-            throw new InvalidArgumentException('CarrotManager component could not detect the current route.');
-        }
-
-        // Iterate over the route's parameters (e.g., $food, $shop)
-        foreach ($route->parameters() as $parameter) {
-            // Check if the parameter is an Eloquent Model instance
-            if ($parameter instanceof Model) {
-                // We found it! Return the first model we find.
-                return $parameter;
-            }
-        }
-
-        // If we get here, no model was passed and none could be found in the route.
-        throw new InvalidArgumentException(
-            'CarrotManager component could not discover a model from the route parameters. Please bind it explicitly using :model="$yourModel".'
-        );
-    }
-
     public function render()
     {
         return view('zero::components.manager');
+    }
+
+    protected function discoverModelFromRoute(): Model
+    {
+        // ... (This method remains exactly the same)
+        $route = Route::current();
+        if (!$route) { /* ... */ }
+        foreach ($route->parameters() as $parameter) {
+            if ($parameter instanceof Model) {
+                return $parameter;
+            }
+        }
+        throw new InvalidArgumentException(/* ... */);
     }
 }

@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "htmx.org": "^2.0.6"
+  },
+  "scripts": {
+    "dev": "esbuild resources/js/carrots.js --bundle --outfile=dist/carrots.js --watch",
+    "build": "esbuild resources/js/carrots.js --bundle --outfile=dist/carrots.js --minify"
+  },
+  "name": "zero",
+  "version": "1.0.0",
+  "description": "\"The circle closes only to open again; what ends is already beginning, and what begins has always been ending.\"",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hetbo/zero.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hetbo/zero/issues"
+  },
+  "homepage": "https://github.com/hetbo/zero#readme"
+}
