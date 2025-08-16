@@ -2,18 +2,27 @@
 
 namespace Hetbo\Zero\Repositories;
 
-use Dotenv\Repository\RepositoryInterface;
+use Hetbo\Zero\Contracts\CarrotRepositoryInterface;
+use Hetbo\Zero\Contracts\UserContract;
 use Hetbo\Zero\Models\Carrot;
-use Hetbo\Zero\Repositories\Contracts\CarrotRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class CarrotRepository implements CarrotRepositoryInterface {
-    public function findById(int $id): ?Carrot
+
+    public function getForUser(UserContract $user): Collection
     {
-        return Carrot::find($id);
+        return $user->carrots()->orderBy('created_at', 'desc')->get();
     }
 
-    public function create(array $data): Carrot
+    public function createForUser(UserContract $user, array $data): bool
     {
-        return Carrot::create($data);
+        $user->carrots()->create($data);
+        return true;
     }
+
+    public function delete(int $carrotId): bool
+    {
+        return Carrot::destroy($carrotId);
+    }
+
 }

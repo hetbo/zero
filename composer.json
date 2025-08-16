@@ -10,7 +10,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Hetbo\\Zero\\Tests\\": "tests/"
+            "Hetbo\\Zero\\Tests\\": "tests/",
+            "Hetbo\\Zero\\Database\\Factories\\": "database/factories/"
         }
     },
     "authors": [
@@ -47,5 +48,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "require": {
+        "pestphp/pest-plugin-laravel": "^3.2"
     }
 }
