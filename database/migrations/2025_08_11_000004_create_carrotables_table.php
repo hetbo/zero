@@ -9,10 +9,12 @@ return new class extends Migration {
         Schema::create('carrotables', function (Blueprint $table) {
             $table->id();
             $table->foreignId('carrot_id')->constrained()->cascadeOnDelete();
-            $table->morphs('carrotable'); // Creates `carrotable_id` & `carrotable_type`
-            $table->string('role');       // The context: 'ingredient', 'salad', 'product'
-
+            $table->morphs('carrotable');
+            $table->string('role');
             $table->unique(['carrot_id', 'carrotable_id', 'carrotable_type', 'role']);
+
+//            $table->index(['carrotable_type', 'carrotable_id']);
+            $table->index('role');
         });
     }
 

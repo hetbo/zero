@@ -43,3 +43,8 @@ Route::prefix('carrot-package')->as('carrot-package.')->middleware('web')->group
 
 // Asset Serving Route
 Route::get('/carrot-package/carrots.js', [AssetController::class, 'source'])->name('carrot-package.assets.js');
+
+// New Routes
+Route::prefix('the-carrots')->as('the-carrots.')->middleware('web')->group(function () {
+    Route::get('/', [])->name('index');
+});

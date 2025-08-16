@@ -2,61 +2,89 @@
 
 namespace Hetbo\Zero\Http\Controllers;
 
-use Hetbo\Zero\Contracts\UserContract;
-use Hetbo\Zero\Models\Carrot;
-use Hetbo\Zero\Services\CarrotService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
+use Hetbo\Zero\Services\CarrotService;
+use Hetbo\Zero\DTOs\CreateCarrotData;
+use Hetbo\Zero\DTOs\UpdateCarrotData;
+use Hetbo\Zero\Http\Requests\CreateCarrotRequest;
+use Hetbo\Zero\Http\Requests\UpdateCarrotRequest;
 
 class CarrotController extends Controller
 {
-    public function __construct(protected CarrotService $carrotService) {}
+    public function __construct(
+        private CarrotService $carrotService
+    ) {}
 
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $user = Auth::user();
+        $perPage = $request->get('per_page', 15);
+        $search = $request->get('search');
 
-        // Add a check to ensure the user is the correct type.
-        if (!$user instanceof UserContract) {
-            // This should never happen if the app is configured correctly,
-            // but it's a safeguard.
-            abort(500, 'Authenticated user does not implement UserWithCarrots interface.');
+        if ($search) {
+            $carrots = $this->carrotService->searchCarrots($search);
+            return response()->json(['data' => $carrots]);
         }
 
-        $carrots = $this->carrotService->getUserCarrots($user);
+        if ($request->get('paginate', true)) {
+            $carrots = $this->carrotService->getPaginatedCarrots($perPage);
+        } else {
+            $carrots = $this->carrotService->getAllCarrots();
+        }
 
-        return view('zero::carrots.index', compact('carrots'));
+        return response()->json($carrots);
     }
 
-    public function store(Request $request)
+    public function show(int $id): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'length' => 'required|integer|min:1',
-        ]);
-
-        $user = Auth::user();
-
-        // The same check here makes the code robust.
-        if (!$user instanceof UserContract) {
-            abort(500, 'Authenticated user does not implement UserWithCarrots interface.');
-        }
-
-        $this->carrotService->addCarrotForUser($user, $request->only('name', 'length'));
-
-        return back()->with('success', 'Carrot added!');
+        $carrot = $this->carrotService->getCarrotOrFail($id);
+        return response()->json(['data' => $carrot]);
     }
 
-    public function destroy(Carrot $carrot)
+    public function store(CreateCarrotRequest $request): JsonResponse
     {
-        // ... (destroy method is fine as it is) ...
-        if ($carrot->user_id !== Auth::id()) {
-            abort(403, 'This is not your carrot to delete.');
+        $data = CreateCarrotData::fromArray($request->validated());
+        $carrot = $this->carrotService->createCarrot($data);
+
+        return response()->json(['data' => $carrot], 201);
+    }
+
+    public function update(UpdateCarrotRequest $request, int $id): JsonResponse
+    {
+        $data = UpdateCarrotData::fromArray($request->validated());
+        $carrot = $this->carrotService->updateCarrot($id, $data);
+
+        return response()->json(['data' => $carrot]);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $this->carrotService->deleteCarrot($id);
+        return response()->json(['message' => 'Carrot deleted successfully']);
+    }
+
+    public function searchByName(Request $request): JsonResponse
+    {
+        $name = $request->get('name');
+        if (!$name) {
+            return response()->json(['error' => 'Name parameter is required'], 400);
         }
 
-        $this->carrotService->removeCarrot($carrot->id);
+        $carrots = $this->carrotService->findCarrotsByName($name);
+        return response()->json(['data' => $carrots]);
+    }
 
-        return back()->with('success', 'Carrot deleted!');
+    public function searchByLength(Request $request): JsonResponse
+    {
+        $minLength = $request->get('min_length');
+        $maxLength = $request->get('max_length');
+
+        if ($minLength === null || $maxLength === null) {
+            return response()->json(['error' => 'Both min_length and max_length parameters are required'], 400);
+        }
+
+        $carrots = $this->carrotService->findCarrotsByLengthRange((int) $minLength, (int) $maxLength);
+        return response()->json(['data' => $carrots]);
     }
 }
