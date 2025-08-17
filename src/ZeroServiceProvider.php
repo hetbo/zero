@@ -25,13 +25,13 @@ class ZeroServiceProvider extends ServiceProvider {
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'zero');
 
-        Blade::component('carrot-manager', CarrotManager::class);
+        Blade::component('zero::components.carrot','carrot');
 
         if ($this->app->runningInConsole()) {
             // Your 'publishes' groups are fine.
             $this->publishes([
                 __DIR__ . '/../resources/views' => resource_path('views/vendor/zero'), // Suggest using 'zero' as the vendor name
-            ], 'zero-views');
+            ], 'views');
 
             $this->publishes([
                 __DIR__ . '/../database/migrations' => database_path('migrations'),

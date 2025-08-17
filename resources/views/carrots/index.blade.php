@@ -1,48 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-g">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Carrots</title>
-    <style> /* Basic styling */ body { font-family: sans-serif; container { max-width: 600px; margin: 40px auto; } } </style>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<div class="container">
-    <h1>My Carrots</h1>
+<div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">All Carrots</h1>
 
-    @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
-
-    <form action="{{ route('carrots.store') }}" method="POST">
-        @csrf
-        <h3>Add a New Carrot</h3>
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name" required>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($carrots as $carrot)
+                <div class="bg-white rounded-lg shadow-md p-6 border">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $carrot->name }}</h3>
+                    <p class="text-gray-600 mb-4">Length: {{ $carrot->length }}cm</p>
+                    <div class="text-sm text-gray-500">
+                        Created: {{ $carrot->created_at->format('M j, Y') }}
+                    </div>
+                </div>
+            @endforeach
         </div>
-        <div>
-            <label for="length">Length (cm):</label>
-            <input type="number" name="length" id="length" required>
-        </div>
-        <button type="submit">Add Carrot</button>
-    </form>
 
-    <hr>
-
-    <h2>Existing Carrots</h2>
-    @forelse ($carrots as $carrot)
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <p>{{ $carrot->name }} ({{ $carrot->length }}cm) - <em>Added: {{ $carrot->created_at->diffForHumans() }}</em></p>
-            <form action="{{ route('carrots.destroy', $carrot) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Delete</button>
-            </form>
-        </div>
-    @empty
-        <p>You don't have any carrots yet.</p>
-    @endforelse
-</div>
+        @if($carrots->isEmpty())
+            <div class="text-center py-12">
+                <p class="text-gray-500 text-lg">No carrots found.</p>
+            </div>
+        @endif
+    </div>
 </body>
 </html>
