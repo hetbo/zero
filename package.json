@@ -1,16 +1,38 @@
 {
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.1",
     "esbuild": "^0.25.9",
-    "htmx.org": "^2.0.6"
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "htmx.org": "^2.0.6",
+    "prettier": "^3.6.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "scripts": {
     "dev": "esbuild resources/js/carrots.js --bundle --outfile=dist/carrots.js --watch",
-    "build": "esbuild resources/js/carrots.js --bundle --outfile=dist/carrots.js --minify"
+    "build": "esbuild resources/js/carrots.js --bundle --outfile=dist/carrots.js --minify",
+    "dev:vite": "vite dev",
+    "build:vite": "vite build",
+    "preview": "vite preview"
   },
   "name": "zero",
   "version": "1.0.0",
   "description": "\"The circle closes only to open again; what ends is already beginning, and what begins has always been ending.\"",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "tests"
   },
@@ -21,7 +43,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/hetbo/zero/issues"
   },

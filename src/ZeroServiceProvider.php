@@ -10,6 +10,7 @@ use Hetbo\Zero\Repositories\CarrotRepository;
 // 1. IMPORT THE BLADE FACADE AND YOUR COMPONENT CLASS
 use Illuminate\Support\Facades\Blade;
 use Hetbo\Zero\View\Components\CarrotManager; // <-- Adjust namespace if needed
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class ZeroServiceProvider extends ServiceProvider {
@@ -41,6 +42,32 @@ class ZeroServiceProvider extends ServiceProvider {
                 __DIR__.'/../config/zero.php' => config_path('zero.php'),
             ], 'config');
         }
+
+/*        if (!file_exists(public_path('hetbo/zero/zero.umd.cjs'))) {
+            $this->callAfterResolving('migrator', function () {
+                $this->app['artisan']->call('vendor:publish', [
+                    '--tag' => 'zero-assets',
+                    '--force' => true
+                ]);
+            });
+        }*/
+
+
+        Route::get('hetbo/zero/{file}', function($file) {
+            $path = __DIR__.'/../dist/' . $file;
+
+            if (!file_exists($path) || !str_ends_with($file, '.cjs')) {
+                abort(404);
+            }
+
+            return response()->file($path, [
+                'Content-Type' => 'application/javascript',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        })->where('file', '.*\.cjs$');
+
+
+
     }
 
     /**
